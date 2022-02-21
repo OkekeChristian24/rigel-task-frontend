@@ -1,0 +1,97 @@
+@media screen and (min-width: 0px) {
+    .SwapInterface{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 500px;
+        background-color: #243036;
+        margin: 40px 10px;
+        border-radius: 6px;
+    }
+
+    .Swap-input{
+        display: flex;
+        height: 70px;
+        flex-flow: column nowrap;
+        position: relative;
+        border-radius: 20px;
+        background-color: rgb(34, 44, 49);
+        z-index: 1;
+        
+    }
+
+    .Token-swap-icon-container {
+        display: grid;
+        grid-auto-rows: auto;
+        margin-top: 30px;
+    }
+
+    .Token-swap-icon {
+        margin: 0px;
+        min-width: 0px;
+        width: 100%;
+        display: flex;
+        padding: 0px;
+        -webkit-box-align: center;
+        align-items: center;
+        flex-wrap: wrap;
+        -webkit-box-pack: center;
+        justify-content: center;
+    }
+
+    .Token-swap-icon-rotate {
+        padding: 2px;
+        transform: rotate(0deg);
+        transition: transform 300ms ease 0s;
+        color: #fff;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        outline: none;
+    }
+
+    .Swap-gas-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .Swap-gas{
+        margin: 20px 0;
+    }
+
+    .Swap-gas-right, .Swap-gas-left{
+        margin-right: -40px;
+    }
+
+    .Swap-gas-left{
+        margin-left: -40px;
+    }
+
+    .From-to{
+        color: #686f74;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    .Connect-wallet{
+        background-color: #264c49;
+        border: 1px solid #264c49;
+        color: rgb(49, 203, 158);
+        cursor: pointer;
+    }
+
+    .Wallet-connect-holder{
+        position: absolute;
+        max-width: 400px;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+}
+
+@media screen and (min-width: 364px){
+    .SwapInterface{
+        margin: 40px auto;
+    }
+}

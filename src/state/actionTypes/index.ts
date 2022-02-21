@@ -1,0 +1,7 @@
+export enum ActionType {
+    CONNECT = "CONNECT",
+    DISCONNECT = "DISCONNECT",
+    UPDATESWAP = "UPDATESWAP",
+    BALANCE = "BALANCE",
+    SWITCH = "SWITCH"
+}

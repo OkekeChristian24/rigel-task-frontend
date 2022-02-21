@@ -1,0 +1,59 @@
+@media screen and (min-width: 0px){
+    .Roundbutton-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-height: 30px;
+        max-width: 300px;
+        min-height: 12px;
+        border-radius: 999px;
+        -webkit-box-pack: center;
+        padding: 4px 8px;
+        font-weight: 700;
+        font-size: 12px;
+        outline: none;
+        border: none;
+        margin: 10px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .active{
+        background-color: rgb(49, 203, 158);
+        z-index: 10;
+    }
+
+    .notactive{
+        background-color: rgb(17, 16, 16);
+        color: #ffffff;
+        margin-left: -10px;
+        padding-left: 60px;
+    }
+
+    .Roundbutton-btn-icon{
+        width: 16px;
+        height: 16px;
+    }
+
+}
+
+@media screen and (min-width: 364px){
+    .Roundbutton-btn{
+        padding: 18px 28px;
+
+    }
+
+    .notactive{
+        padding-left: 70px;
+    }
+}
+
+@media screen and (min-width: 450px){
+    .Roundbutton-btn{
+        padding: 23px 45px;
+    }
+
+    .notactive{
+        padding-left: 80px;
+    }
+}
