@@ -1,0 +1,19 @@
+@media screen and (min-width: 0px){
+    .notification-container{
+        border: 1px solid #243036;
+        background-color: #243036;
+        border-radius: 9px;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .notification-container > p{
+        border: 1px solid #ffffff;
+        border-radius: 10px;
+        padding: 9px 12px;
+        margin-top: 20px;
+    }
+/* style={{textAlign: 'center', marginLeft: '20px'}} */
+}
