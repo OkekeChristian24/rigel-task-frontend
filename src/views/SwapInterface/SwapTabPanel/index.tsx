@@ -65,6 +65,7 @@ export default function SwapTabPanel(){
 
     async function checkTokenAllowance(){
         if(!isNaN(Number(fromValue)) && state.address !== ""){
+            console.log("In checkAllowance: ", state.from.value);
             const ERC20ContractInstance = setERC20Contract(ERC20ABI.abi, tradeTokenContractAddress);
             const result = await checkAllowance(ERC20ContractInstance, tradeContractAddress, Number(fromValue), state.address);
             setIsApproved(result);
