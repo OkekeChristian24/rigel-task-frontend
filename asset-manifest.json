@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/rigel-task-frontend/static/css/main.55ff279e.chunk.css",
-    "main.js": "/rigel-task-frontend/static/js/main.eced9fb7.chunk.js",
-    "main.js.map": "/rigel-task-frontend/static/js/main.eced9fb7.chunk.js.map",
+    "main.js": "/rigel-task-frontend/static/js/main.d8dfba60.chunk.js",
+    "main.js.map": "/rigel-task-frontend/static/js/main.d8dfba60.chunk.js.map",
     "runtime-main.js": "/rigel-task-frontend/static/js/runtime-main.1c14132c.js",
     "runtime-main.js.map": "/rigel-task-frontend/static/js/runtime-main.1c14132c.js.map",
     "static/js/2.801ed1e3.chunk.js": "/rigel-task-frontend/static/js/2.801ed1e3.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.1c14132c.js",
     "static/js/2.801ed1e3.chunk.js",
     "static/css/main.55ff279e.chunk.css",
-    "static/js/main.eced9fb7.chunk.js"
+    "static/js/main.d8dfba60.chunk.js"
   ]
 }
