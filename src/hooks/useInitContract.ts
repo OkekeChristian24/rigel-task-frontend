@@ -22,6 +22,7 @@ export default function useInitContract(props: initContractProps){
           await createContractInstance(abi, address);
       })();
   }, []);
+
   return {
     contractInstance,
     createContractInstance

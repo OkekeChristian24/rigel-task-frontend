@@ -11,9 +11,16 @@ interface UserBalances {
     tokenBalance: number
 }
 
+export interface TokenValues {
+    from: number,
+    to: number
+}
+
 export interface TokenDetails {
     name: string,
     balance: number,
+    value: number,
+    isETH: boolean,
     logo?: any
 }
 
@@ -46,5 +53,10 @@ interface SwitchAction {
     payload: TokensToSwap
 }
 
+interface UpdateValueAction {
+    type: ActionType.VALUE_CHANGE,
+    payload: TokenValues
+}
 
-export type Action = ConnectAction | DisconnectAction | UpdateSwapAction | BalanceAction | SwitchAction;
+
+export type Action = ConnectAction | DisconnectAction | UpdateSwapAction | BalanceAction | SwitchAction | UpdateValueAction;

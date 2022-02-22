@@ -17,6 +17,7 @@ import checkAllowance from "../../../web3RPCs/checkAllowance";
 import approveToken from "../../../web3RPCs/approveToken";
 import getBalances from "../../../web3RPCs/getBalances";
 import { swapEthForERC20, swapERC20ForEth } from "../../../web3RPCs/tradeTokens";
+import { ethToERC20Rate } from "../../../constants/tradeRate"; 
 
 
 export default function SwapTabPanel(){
@@ -27,10 +28,13 @@ export default function SwapTabPanel(){
     const state: StateType = useSelector((state: RootState) => state.allData);
 
 
-    
+    // Component states
     const [fromValue, setFromValue] = useState("");
     const [toValue, setToValue] = useState("");
     const [isApproved, setIsApproved] = useState(false);
+    const [approveIsLoading, setApproveIsLoading] = useState(false);
+    const [swapIsLoading, setSwapIsLoading] = useState(false);
+    const [allowanceIsLoading, setAllowanceIsLoading] = useState(false);
     
     // Custom hooks
     const {isLoading, web3, account, chainID, getInjectedWallet } = useConnectWallet();
@@ -40,62 +44,66 @@ export default function SwapTabPanel(){
     
     async function ConnectWalletHandler(){
         await getInjectedWallet();
+        await getUserBalances();
     }
     
     function getFromValue(value: string){
-        console.log("From value: ", value);
         setFromValue(value);
     }
 
     function getToValue(value: string){
         setToValue(value);
-        console.log("To value: ", value);
     }
 
-    /*
-    {
-        provider: "",
-        address: "",
-        chainID: 0,
-        ethBalance: 0,
-        tokenBalance: 0,
-        from: {
-            name: "ETH",
-            balance: 0,
-            logo: ""
-        },
-        to: {
-            name: "tCHRIS",
-            balance: 0,
-            logo: ""
-        }
-    }
-    */
+    
 
+    
     function switchTradeTokens(){
         switchTokens(state.to, state.from);
         
     }
 
     async function checkTokenAllowance(){
-        //ERC20Instance: any, tradeContractAddress: string, tokenAmount: number, trader: string
         if(!isNaN(Number(fromValue)) && state.address !== ""){
-            const result = await checkAllowance(ERC20Contract, tradeContractAddress, Number(fromValue), state.address);
+            const ERC20ContractInstance = setERC20Contract(ERC20ABI.abi, tradeTokenContractAddress);
+            const result = await checkAllowance(ERC20ContractInstance, tradeContractAddress, Number(fromValue), state.address);
             setIsApproved(result);
         }
     }
 
     async function approve(){
-        //ERC20Instance: any, tradeContractAddress: string, tokenAmount: number, trader: string
-        if(!isNaN(Number(fromValue)) && state.address !== ""){
-            const result = await approveToken(ERC20Contract, tradeContractAddress, Number(fromValue), state.address);
+        setApproveIsLoading(true);
+        try {
+            if(!isNaN(Number(fromValue)) && state.address !== ""){
+                const ERC20ContractInstance = await setERC20Contract(ERC20ABI.abi, tradeTokenContractAddress);
+                const result = await approveToken(ERC20ContractInstance, tradeContractAddress, Number(fromValue), state.address);
+                console.log("Approval result: ", result);
+                if(result){
+                    setIsApproved(result);
+                    
+                }else{
+                    throw new Error("Approval failed");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }finally{
+            setApproveIsLoading(false);
         }
     }
 
     async function tradeEthForToken(){
-        //tradeContractInstance: any, trader: string, ethAmt: number
-        if(!isNaN(Number(fromValue)) && state.address !== ""){
-            const result = await swapEthForERC20(tradeContract, state.address, Number(fromValue));
+        try {
+            
+            if(!isNaN(Number(fromValue)) && state.address !== ""){
+                const tradeContractInstance = await setTradeContract(TradeABI.abi, tradeContractAddress);
+                const result = await swapEthForERC20(tradeContractInstance, state.address, Number(state.from.value));
+                return result;
+            }
+
+        } catch (error) {
+            console.log(error);
+            return false;
         }
     }
 
@@ -103,17 +111,35 @@ export default function SwapTabPanel(){
         try {
             
             if(!isNaN(Number(fromValue)) && state.address !== ""){
-                const result = await swapERC20ForEth(tradeContract, state.address, Number(fromValue));
+                const tradeContractInstance = await setTradeContract(TradeABI.abi, tradeContractAddress);
+                const result = await swapERC20ForEth(tradeContractInstance, state.address, Number(fromValue));
+                return result;
+            }
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
+    async function getUserBalances(){
+        try {
+            if(state.address !== ""){
+                const ERC20ContractInstance = await setERC20Contract(ERC20ABI.abi, tradeTokenContractAddress);
+                const { tokenBalance , ethBalance} = await getBalances(ERC20ContractInstance, state.address);
+                
+                updateSwap(ethBalance, tokenBalance);
             }
         } catch (error) {
             console.log(error);
         }
     }
 
+
     async function swapToken(){
+        setSwapIsLoading(true);
         try {
             
-            if(state.from.name === "ETH"){
+            if(state.from.isETH){
                 await tradeEthForToken();
             }else{
                 await tradeTokenForEth();
@@ -121,27 +147,25 @@ export default function SwapTabPanel(){
         } catch (error) {
             console.log(error);
         }finally{
+            setSwapIsLoading(false);
             await getUserBalances();
         }
     }
 
-    async function getUserBalances(){
-        //ERC20Instance: any, account: string
-        if(state.address !== ""){
-            const { tokenBalance , ethBalance} = await getBalances(ERC20Contract, state.address);
-            updateSwap(ethBalance, tokenBalance);
-        }
-    }
+    
+    
     
 
     useEffect(() => {
         (async function(){
-            if(state.from.name !== "ETH"){
+            if(state.from.isETH){
                 await checkTokenAllowance();
+                await getUserBalances();
             }
         })();
     }, [state.address, state.from]);
 
+   
     return(
         <div>
             <div className="From-to">From:</div>
@@ -149,9 +173,12 @@ export default function SwapTabPanel(){
                 <TradeInput
                     getValue={getFromValue} 
                     isFrom={true}
+                    isETH={state.from.isETH}
+                    fromValue={0}
                     tokenName={state.from.name}
                     tokenLogoLink={state.from.logo}
-                    tokenBalance={state.from.balance}
+                    tokenBalance={state.from.isETH ? state.ethBalance : state.tokenBalance}
+                    showValue={state.from.value}
                 />
             </div>
             <div className='Token-swap-icon-container'>
@@ -169,9 +196,12 @@ export default function SwapTabPanel(){
                 <TradeInput
                     getValue={getToValue}
                     isFrom={false}
+                    isETH={state.from.isETH}
+                    fromValue={Number(fromValue)}
                     tokenName={state.to.name}
                     tokenLogoLink={state.to.logo}
-                    tokenBalance={state.to.balance}
+                    tokenBalance={state.to.isETH ? state.ethBalance : state.tokenBalance}
+                    showValue={state.to.value}
                 />
             </div>
             
@@ -187,19 +217,19 @@ export default function SwapTabPanel(){
                 {
                     state.address === ""
                     ?
-                    <Button disabled={isLoading} onClick={ConnectWalletHandler} className="Connect-wallet" label={account !== "" ? account : (isLoading ? "Loading..." : "Connect Wallet")} />
+                    <Button disabled={isLoading} onClick={ConnectWalletHandler} className="Connect-wallet" label={account !== "" ? account : (isLoading ? "Connecting..." : "Connect Wallet")} />
                     :
                     (
                         state.from.name === "ETH"
                         ?
-                        <Button disabled={isLoading} onClick={swapToken} className="Connect-wallet" label={"Swap"} />
+                        <Button disabled={swapIsLoading} onClick={swapToken} className="Connect-wallet" label={swapIsLoading ? "Swapping... Please wait" : "Swap"} />
                         :
                         (
                             isApproved
                             ?
-                            <Button disabled={isLoading} onClick={swapToken} className="Connect-wallet" label={"Swap"} />
+                            <Button disabled={swapIsLoading} onClick={swapToken} className="Connect-wallet" label={swapIsLoading ? "Swapping... Please wait" : "Swap"} />
                             :
-                            <Button disabled={isLoading} onClick={approve} className="Connect-wallet" label={"Approve"} />
+                            <Button disabled={approveIsLoading} onClick={approve} className="Connect-wallet" label={approveIsLoading ? `Approving ${state.from.name}` : "Approve"} />
 
                         )
                     )

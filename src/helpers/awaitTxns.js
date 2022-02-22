@@ -1,12 +1,21 @@
-// @method awaitBlockConsensus
-// @param web3s[0] is the node you submitted the transaction to,  the other web3s 
-//    are for cross verification, because you shouldn't trust one node.
-// @param txhash is the transaction hash from when you submitted the transaction
-// @param blockCount is the number of blocks to wait for.
-// @param timout in seconds 
-// @param callback - callback(error, transaction_receipt) 
-//
-module.exports.awaitBlockConsensus = function(web3s, txhash, blockCount, timeout, callback) {
+
+export function awaitBlockConsensus(web3, txHash, blockCount, timeout){
+  return new Promise((resolve, reject) => {
+    awaiting([web3], txHash, blockCount, timeout, (error, txnReceipt) => {
+      if(error){
+          console.log(error);
+          reject(false);
+      }
+      resolve(true);
+  });
+
+  });
+}
+
+
+
+
+export function awaiting(web3s, txhash, blockCount, timeout, callback) {
      
     var txWeb3 = web3s[0];
     var startBlock = Number.MAX_SAFE_INTEGER;

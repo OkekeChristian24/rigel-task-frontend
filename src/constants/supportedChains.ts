@@ -1,15 +1,15 @@
-export const supportedChainID: number = 3;
+export const supportedChainID: number = 97;
 
 export const supportedChains: Object[] = [
     {
-        chainId: '0x3',
-        chainName: 'Ethereum Ropsten',
-        rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
+        chainId: '0x61',
+        chainName: 'Binance Smart Chain Testnet',
+        rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
         nativeCurrency: {
-            name: 'Ethereum',
-            symbol: 'ETH',
+            name: 'Smart Chain Testnet',
+            symbol: 'BNB',
             decimals: 18
         },
-        blockExplorerUrls: ['https://ropsten.etherscan.io']
+        blockExplorerUrls: ['https://testnet.bscscan.com']
     }
 ];

@@ -9,15 +9,11 @@ export default async function approveToken(ERC20Instance: any, tradeContractAddr
             from: trader
         });
         const txHash = data.transactionHash;
-        awaitBlockConsensus([window.initWeb3], txHash, 3, 750, (error: any, txnReceipt: Object) => {
-            if(error){
-                console.log(error);
-                throw new Error("Error");
-            }
-            return 1
-        });
+
+        return await awaitBlockConsensus(window.initWeb3, txHash, 3, 750);
+        
     } catch (error) {
-        return 0;
+        return false;
     }
 
 }

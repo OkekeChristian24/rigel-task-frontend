@@ -3,5 +3,6 @@ export enum ActionType {
     DISCONNECT = "DISCONNECT",
     UPDATESWAP = "UPDATESWAP",
     BALANCE = "BALANCE",
-    SWITCH = "SWITCH"
+    SWITCH = "SWITCH",
+    VALUE_CHANGE = "VALUE_CHANGE"
 }

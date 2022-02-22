@@ -1,6 +1,6 @@
 import { Dispatch } from "redux"
 import { ActionType } from "../actionTypes";
-import { Action, TokenDetails } from "../actions";
+import { Action, TokenDetails, TokenValues } from "../actions";
 
 
 export function connectWallet(provider: any, address: string, chainID: number){
@@ -12,16 +12,16 @@ export function connectWallet(provider: any, address: string, chainID: number){
                 address,
                 chainID
             }
-        })
-    }
+        });
+    };
 }
 
 export function disconnectWallet(){
     return (dispatch: Dispatch<Action>) => {
         dispatch({
             type: ActionType.DISCONNECT
-        })
-    }
+        });
+    };
 }
 
 export function updateSwap(ethBalance: number, tokenBalance: number){
@@ -32,8 +32,8 @@ export function updateSwap(ethBalance: number, tokenBalance: number){
                 ethBalance,
                 tokenBalance
             }
-        })
-    }
+        });
+    };
 }
 
 export function getBalance(ethBalance: number, tokenBalance: number){
@@ -44,8 +44,8 @@ export function getBalance(ethBalance: number, tokenBalance: number){
                 ethBalance,
                 tokenBalance
             }
-        })
-    }
+        });
+    };
 }
 
 export function switchTokens(from: TokenDetails, to: TokenDetails){
@@ -56,6 +56,15 @@ export function switchTokens(from: TokenDetails, to: TokenDetails){
                 from,
                 to
             }
-        })
-    }
+        });
+    };
+}
+
+export function handleValueChange(values: TokenValues){
+    return (dispatch: Dispatch<Action>) => {
+        dispatch({
+            type: ActionType.VALUE_CHANGE,
+            payload: values
+        });
+    };
 }
